@@ -1,4 +1,6 @@
-package proyecto2;
+package handlers;
+
+import handlers.ImageHandler;
 
 
 /**

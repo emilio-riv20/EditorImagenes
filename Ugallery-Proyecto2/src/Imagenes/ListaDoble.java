@@ -1,51 +1,45 @@
 package Imagenes;
 
+import javax.swing.JOptionPane;
 import proyecto2.EstructuraDeDatos;
 
 public class ListaDoble extends EstructuraDeDatos {
 
-    private NodoImagen inicio;
+    private NodoImagen comienzo;
+    private NodoImagen recorrido;
 
     public ListaDoble() {
-        this.inicio = null;
+        this.index = 0;
+        this.comienzo = null;
+        this.nombre = "";
+        this.recorrido = null;
+
     }
 
-    public void agregar(String imagen) {
-
-    }
-
-    public void MostrarDelante() {
-        NodoImagen temporal = this.inicio;
-        while (temporal != null) {
-
-            temporal = temporal.getSiguiente();
-        }
-    }
-
-    public void mostrarAtras() {
-        NodoImagen temporal = this.inicio;
-        while (temporal != null) {
-            temporal = temporal.getSiguiente();
-        }
-        while (temporal != null) {
-            temporal.getImagen();
-            temporal = temporal.getAnterior();
-        }
+    private void Primero(NodoImagen NuevoNodo) {
+        NuevoNodo.setSigAn(NuevoNodo, NuevoNodo);
+        comienzo = NuevoNodo;
+        this.index++;
     }
 
     @Override
     public void add(Object e) {
-        NodoImagen NuevoNodo = new NodoImagen((String) e);
+        NodoImagen NuevoNodo = (NodoImagen) e;
 
-        if (this.inicio == null) {
-            this.inicio = NuevoNodo;
-        } else {
-            NodoImagen temporal = this.inicio;
-            while (temporal.getSiguiente() != null) {
-                temporal = temporal.getSiguiente();
+        if (find(NuevoNodo.getImagen()) == null) {
+            if (this.index == 0) {
+                Primero(NuevoNodo);
+            } else {
+                NuevoNodo.setSigAn(comienzo.getAnterior().getSiguiente(), comienzo.getAnterior());
+                if (index == 1) {
+                    comienzo.setSigAn(NuevoNodo, NuevoNodo);
+                } else {
+                    comienzo.getAnterior().setSiguiente(NuevoNodo);
+                    comienzo.setAnterior(NuevoNodo);
+                }
             }
-            temporal.setSiguiente(NuevoNodo);
-            temporal.setAnterior(temporal);
+        } else {
+            JOptionPane.showMessageDialog(null, "Esta imagen ya existe");
         }
     }
 
@@ -56,17 +50,38 @@ public class ListaDoble extends EstructuraDeDatos {
 
     @Override
     public Object find(Object e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String nombre = (String) e;
+        NodoImagen actual = comienzo;
+        for (int i = 0; i < index; i++) {
+            if (actual.getImagen().equals(nombre)) {
+                return actual;
+            } else {
+                actual = actual.getSiguiente();
+            }
+        }
+        return null;
     }
 
     @Override
     public Object getNext() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (recorrido == null) {
+            recorrido = comienzo;
+        }
+        recorrido = recorrido.getSiguiente();
+        return recorrido;
+    }
+
+    public Object getBack() {
+        if (recorrido == null) {
+            recorrido = comienzo;
+        }
+        recorrido = recorrido.getAnterior();
+        return recorrido;
     }
 
     @Override
     public int getSize() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.index;
     }
 
     @Override
@@ -81,7 +96,27 @@ public class ListaDoble extends EstructuraDeDatos {
 
     @Override
     public void delete(Object e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Object eliminar = find(e);
+        if (eliminar != null) {
+            NodoImagen img = (NodoImagen)eliminar;
+            if (index==1) {
+                comienzo=null;
+            }else{
+                img.getAnterior().setSiguiente(img.getSiguiente());
+                img.getSiguiente().setAnterior(img.getAnterior());
+            }
+            index--;
+        }else{
+            JOptionPane.showMessageDialog(null, "Lista vacia");
+        }
+    }
+    
+    public void actualizar(String nombre, String ruta){
+        Object eliminar = find(nombre);
+        if (eliminar != null) {
+            NodoImagen actual = (NodoImagen)eliminar;
+            actual.setRuta(ruta);
+        }
     }
 
 }

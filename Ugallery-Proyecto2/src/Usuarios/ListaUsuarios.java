@@ -1,5 +1,6 @@
 package Usuarios;
 
+import javax.swing.JOptionPane;
 import proyecto2.EstructuraDeDatos;
 
 public class ListaUsuarios extends EstructuraDeDatos {
@@ -9,7 +10,8 @@ public class ListaUsuarios extends EstructuraDeDatos {
 
     public ListaUsuarios() {
         this.inicio = null;
-        this.tamaño = 0;
+        this.tamaño =0;
+        this.index = 0;
     }
 
     public void Mostrar() {
@@ -20,23 +22,35 @@ public class ListaUsuarios extends EstructuraDeDatos {
             Temporal = Temporal.getSiguiente();
         }
     }
-
-    public boolean Comprobar(String usuario) {
-        Nodo actual = inicio;
-
-        while (actual != null) {
-            if (actual.getUsuario().equals(usuario)) {
-                return true;
-            }
-            actual = actual.getSiguiente();
-        }
-        return false;
+    
+        private void Primero(Nodo NuevoNodo) {
+        NuevoNodo.setSiguiente(NuevoNodo);
+        inicio = NuevoNodo;
+        this.index++;
     }
 
     @Override
     public void add(Object e) {
-        Nodo NuevoNodo = new Nodo((String) e);
-        if (inicio == null) {
+
+       Nodo NuevoNodo = new Nodo((String) e);
+        
+        if (find(NuevoNodo.getUsuario()) == null) {
+            if (this.index==0) {
+                Primero(NuevoNodo);
+            }else{
+                NuevoNodo.setSiguiente(inicio.getSiguiente());
+                if (index==1) {
+                    inicio.setSiguiente(NuevoNodo);
+                }else{
+                    inicio.getSiguiente().setSiguiente(NuevoNodo);
+                    inicio.setSiguiente(NuevoNodo);
+                }
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Este usuario ya existe");
+        }
+        
+       /* if (inicio == null) {
             inicio = NuevoNodo;
         } else {
             Nodo Temporal = inicio;
@@ -45,7 +59,7 @@ public class ListaUsuarios extends EstructuraDeDatos {
             }
             Temporal.setSiguiente(NuevoNodo);
         }
-        tamaño++;
+        tamaño++;*/
     }
 
     @Override
@@ -55,7 +69,16 @@ public class ListaUsuarios extends EstructuraDeDatos {
 
     @Override
     public Object find(Object e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String nombre = (String) e;
+        Nodo actual = inicio;
+        for (int i = 0; i < index; i++) {
+            if (actual.getUsuario().equals(nombre)) {
+                return actual;
+            } else {
+                actual = actual.getSiguiente();
+            }
+        }
+        return null;
     }
 
     @Override

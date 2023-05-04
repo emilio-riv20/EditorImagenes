@@ -4,12 +4,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
-import org.apache.commons.io.FilenameUtils;
+//import org.apache.commons.io.FilenameUtils;
 
-/**
- *
- * @author josed
- */
 public class JPEGImageHandlerBN extends ImageHandler {
     String nombreCorto;
     BufferedImage jpg = null;

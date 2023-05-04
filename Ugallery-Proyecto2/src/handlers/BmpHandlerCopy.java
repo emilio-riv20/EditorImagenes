@@ -1,5 +1,6 @@
 package proyecto2;
 
+import handlers.ImageHandler;
 import java.io.*;
 
 /**

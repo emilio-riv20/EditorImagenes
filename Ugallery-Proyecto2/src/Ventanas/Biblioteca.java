@@ -1,22 +1,27 @@
 package Ventanas;
 
-import Usuarios.Nodo;
+import Imagenes.ListaDoble;
+import Imagenes.NodoImagen;
 import java.awt.Image;
-import java.io.File;
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Biblioteca extends javax.swing.JFrame {
-    
-DefaultListModel <String> modelo = new DefaultListModel<>();
+
+    DefaultListModel<String> modelo = new DefaultListModel<>();
+    JComboBox<String> comboBox = new JComboBox<String>();
+    ListaDoble imagenes = new ListaDoble();
+    String img;
+
     public Biblioteca() {
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         Lista.setModel(modelo);
         modelo.addElement("Default");
     }
@@ -37,11 +42,11 @@ DefaultListModel <String> modelo = new DefaultListModel<>();
         EtiquetaImagen = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        Caja = new javax.swing.JComboBox<>();
         jButton5 = new javax.swing.JButton();
         Categoria = new javax.swing.JTextField();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        Anterior = new javax.swing.JButton();
+        Siguiente = new javax.swing.JButton();
 
         jScrollPane1.setViewportView(jTextPane1);
 
@@ -106,12 +111,12 @@ DefaultListModel <String> modelo = new DefaultListModel<>();
         });
         jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 500, -1, -1));
 
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        Caja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                CajaActionPerformed(evt);
             }
         });
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(152, 83, 540, -1));
+        jPanel1.add(Caja, new org.netbeans.lib.awtextra.AbsoluteConstraints(152, 83, 540, -1));
 
         jButton5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jButton5.setForeground(new java.awt.Color(0, 0, 0));
@@ -124,16 +129,21 @@ DefaultListModel <String> modelo = new DefaultListModel<>();
         jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 510, -1, -1));
         jPanel1.add(Categoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 140, -1));
 
-        jButton6.setText("←");
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 120, -1, 300));
-
-        jButton7.setText("→");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        Anterior.setText("←");
+        Anterior.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                AnteriorActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 120, -1, 300));
+        jPanel1.add(Anterior, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 120, -1, 300));
+
+        Siguiente.setText("→");
+        Siguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SiguienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Siguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 120, -1, 300));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,59 +170,86 @@ DefaultListModel <String> modelo = new DefaultListModel<>();
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private NodoImagen buscar() {
         JFileChooser fc = new JFileChooser();
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagenes", "png", "jpg");
         fc.setFileFilter(filtro);
-        
         int opcion = fc.showOpenDialog(this);
-        
-        if (opcion==JFileChooser.APPROVE_OPTION) {
-            File archivo = fc.getSelectedFile();
-            ImageIcon imagen = new ImageIcon(archivo.getAbsolutePath());
-            Image img = imagen.getImage();
-            Image nueva = img.getScaledInstance(EtiquetaImagen.getWidth(), EtiquetaImagen.getHeight(), Image.SCALE_SMOOTH);
-            ImageIcon icono = new ImageIcon(nueva);
-            EtiquetaImagen.setIcon(icono);
-            
-            
 
-            //Almacenar las imagenes en las listas
-            int indice = Lista.getSelectedIndex();
-            String valor = Lista.getSelectedValue();
-            Nodo[] nodos = new Nodo[modelo.size()];
+        if (opcion == JFileChooser.APPROVE_OPTION) {
+            String nombre = fc.getSelectedFile().getName();
+            String ubicacion = fc.getSelectedFile().getPath();
+            return new NodoImagen(nombre, ubicacion);
         }
-        
+        return null;
+    }
+
+    private void agregar() {
+        NodoImagen actual = buscar();
+        img = actual.getRuta();
+        if (!img.equals("")) {
+            mostrar(this.EtiquetaImagen, img);
+            imagenes.add(actual);
+            Caja.addItem(img);
+        }
+    }
+
+    private void mostrar(JLabel cuadro, String ruta) {
+        if (!ruta.equals("")) {
+            Image img = new ImageIcon(ruta).getImage();
+            img = img.getScaledInstance(EtiquetaImagen.getWidth(), EtiquetaImagen.getHeight(), Image.SCALE_SMOOTH);
+            ImageIcon imgI = new ImageIcon(img);
+            cuadro.setIcon(imgI);
+        }
+    }
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        agregar();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
         if (Categoria.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Rellene el campo de texto");
         } else {
-            agregar();
+            agregarCat();
         }
-
-
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    private void SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SiguienteActionPerformed
+        if (Caja.getItemCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione una imagen");
+        } else {
+            NodoImagen actual = (NodoImagen) imagenes.getNext();
+            System.out.println(actual.getRuta());
+            mostrar(EtiquetaImagen, actual.getRuta());
+        }
+    }//GEN-LAST:event_SiguienteActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void CajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CajaActionPerformed
+
+    }//GEN-LAST:event_CajaActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         eliminar();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
-   /* public DefaultListModel limpiar() {
+    private void AnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnteriorActionPerformed
+        if (Caja.getItemCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione una imagen");
+        } else {
+            NodoImagen actual = (NodoImagen) imagenes.getBack();
+            System.out.println(actual.getRuta());
+            mostrar(EtiquetaImagen, actual.getRuta());
+        }
+
+
+    }//GEN-LAST:event_AnteriorActionPerformed
+
+    /* public DefaultListModel limpiar() {
 
         DefaultListModel modelo = new DefaultListModel();
         Lista.setModel(modelo);
@@ -220,15 +257,14 @@ DefaultListModel <String> modelo = new DefaultListModel<>();
         return modelo;
 
     }*/
-
-    public DefaultListModel agregar() {
+    public DefaultListModel agregarCat() {
 
         DefaultListModel modelo = (DefaultListModel) Lista.getModel();
         modelo.addElement(Categoria.getText());
         return modelo;
     }
-    
-    public DefaultListModel eliminar (){
+
+    public DefaultListModel eliminar() {
         DefaultListModel modelo = (DefaultListModel) Lista.getModel();
         modelo.remove(Lista.getSelectedIndex());
         return modelo;
@@ -267,17 +303,17 @@ DefaultListModel <String> modelo = new DefaultListModel<>();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Anterior;
+    private javax.swing.JComboBox<String> Caja;
     private javax.swing.JTextField Categoria;
     private javax.swing.JLabel EtiquetaImagen;
     private javax.swing.JList<String> Lista;
+    private javax.swing.JButton Siguiente;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

@@ -123,7 +123,6 @@ public class Principal extends javax.swing.JFrame {
         } else {
             lista.add(usuario);
             JOptionPane.showMessageDialog(null, "Nuevo usuario creado");
-            lista.Mostrar();
             Biblioteca biblioteca = new Biblioteca();
             this.setVisible(false);
             biblioteca.setVisible(true);
@@ -145,6 +144,10 @@ public class Principal extends javax.swing.JFrame {
         if (User.getText().isEmpty()) {
             getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Ingrese un nombre de usuario");
+        }else{
+            this.setVisible(false);
+            Editor editor = new Editor();
+            editor.setVisible(true);
         }
     }//GEN-LAST:event_BotonEditorActionPerformed
 
