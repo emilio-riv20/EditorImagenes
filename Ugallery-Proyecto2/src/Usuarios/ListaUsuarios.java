@@ -10,7 +10,7 @@ public class ListaUsuarios extends EstructuraDeDatos {
 
     public ListaUsuarios() {
         this.inicio = null;
-        this.tamaño =0;
+        this.tamaño = 0;
         this.index = 0;
     }
 
@@ -22,8 +22,8 @@ public class ListaUsuarios extends EstructuraDeDatos {
             Temporal = Temporal.getSiguiente();
         }
     }
-    
-        private void Primero(Nodo NuevoNodo) {
+
+    private void Primero(Nodo NuevoNodo) {
         NuevoNodo.setSiguiente(NuevoNodo);
         inicio = NuevoNodo;
         this.index++;
@@ -32,26 +32,28 @@ public class ListaUsuarios extends EstructuraDeDatos {
     @Override
     public void add(Object e) {
 
-       Nodo NuevoNodo = new Nodo((String) e);
-        
+        Nodo NuevoNodo = new Nodo((String) e);
+
         if (find(NuevoNodo.getUsuario()) == null) {
-            if (this.index==0) {
+            if (this.index == 0) {
                 Primero(NuevoNodo);
-            }else{
+            } else {
                 NuevoNodo.setSiguiente(inicio.getSiguiente());
-                if (index==1) {
+                if (index == 1) {
                     inicio.setSiguiente(NuevoNodo);
-                }else{
+                } else {
                     inicio.getSiguiente().setSiguiente(NuevoNodo);
                     inicio.setSiguiente(NuevoNodo);
                 }
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Este usuario ya existe");
         }
-        
-       /* if (inicio == null) {
-            inicio = NuevoNodo;
+        /*if (find(NuevoNodo.getUsuario())==null) {
+            if (this.index==0) {
+                Primero(NuevoNodo);
+            }
+            //inicio = NuevoNodo;
         } else {
             Nodo Temporal = inicio;
             while (Temporal.getSiguiente() != null) {
@@ -59,7 +61,7 @@ public class ListaUsuarios extends EstructuraDeDatos {
             }
             Temporal.setSiguiente(NuevoNodo);
         }
-        tamaño++;*/
+        index++;*/
     }
 
     @Override

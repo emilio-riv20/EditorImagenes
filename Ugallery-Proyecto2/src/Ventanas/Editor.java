@@ -4,6 +4,7 @@ import Imagenes.BlancoNegro;
 import Imagenes.CambiarColores;
 import Imagenes.Convertidor;
 import Imagenes.CopiaImg;
+import Imagenes.Modificar;
 import Imagenes.NodoImagen;
 import handlers.JPEGHandler;
 import java.awt.Image;
@@ -137,17 +138,19 @@ public class Editor extends javax.swing.JFrame {
         } else {
             if (Convertir.isSelected()) {
                 Convertir();
-                System.out.println("Aun no");
+                JOptionPane.showMessageDialog(null, "Proceso completado");
             } else if (BN.isSelected()) {
                 BlancoNegro();
                 JOptionPane.showMessageDialog(null, "Proceso completado");
             }else if(Copia.isSelected()){
                 Copia();
-                System.out.println("Aun no");
+                JOptionPane.showMessageDialog(null, "Proceso completado");
             }else if (Modificar.isSelected()) {
-                System.out.println("Aun no");
+                Voltear();
+                JOptionPane.showMessageDialog(null, "Proceso completado");
             }else if (Colores.isSelected()) {
                 Cambiar();
+                JOptionPane.showMessageDialog(null, "Proceso completado");
             }
 
         }
@@ -183,7 +186,14 @@ public class Editor extends javax.swing.JFrame {
         try {
             JPEGHandler.runHandler(cambiar);
         } catch (Exception ex) {
-            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void Voltear(){
+        Modificar volteo = new Modificar(img);
+        try {
+            JPEGHandler.runHandler(volteo);
+        } catch (Exception ex) {
         }
     }
 

@@ -1,7 +1,5 @@
 package Imagenes;
 
-import java.awt.image.BufferedImage;
-
 public class NodoImagen {
 
     private String imagen;

@@ -25,8 +25,10 @@ public class CopiaImg extends ImageHandler {
         this.jpg2 = null; //Copia
         this.bmp = null;
         this.bmp2 = null; //Copia
+        this.bmp3 = null;
         this.archivo = new File(getFileName());
         this.archivoCopia = new File(getFileName());
+        this.archivoConversion = new File(getFileName());
         this.nombre = filename;
     }
 
