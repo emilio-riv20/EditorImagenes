@@ -1,9 +1,14 @@
 package Ventanas;
 
 import Imagenes.BlancoNegro;
+import Imagenes.CambiarColores;
+import Imagenes.Convertidor;
+import Imagenes.CopiaImg;
 import Imagenes.NodoImagen;
 import handlers.JPEGHandler;
 import java.awt.Image;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -23,12 +28,13 @@ public class Editor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
+        Convertir = new javax.swing.JRadioButton();
+        Copia = new javax.swing.JRadioButton();
+        Colores = new javax.swing.JRadioButton();
+        Modificar = new javax.swing.JRadioButton();
+        BN = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -41,30 +47,35 @@ public class Editor extends javax.swing.JFrame {
         jPanel1.setForeground(new java.awt.Color(204, 204, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jRadioButton1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jRadioButton1.setText("JPEG a BMP y Viceversa");
-        jPanel1.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 210, -1));
+        buttonGroup1.add(Convertir);
+        Convertir.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        Convertir.setText("JPEG a BMP y Viceversa");
+        jPanel1.add(Convertir, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 210, -1));
 
-        jRadioButton2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jRadioButton2.setText("Copia JPEG");
-        jPanel1.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 210, -1));
+        buttonGroup1.add(Copia);
+        Copia.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        Copia.setText("Copia JPEG");
+        jPanel1.add(Copia, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 210, -1));
 
-        jRadioButton3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jRadioButton3.setText("Rojo, Verde, Azul, Sepia");
-        jPanel1.add(jRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 210, -1));
+        buttonGroup1.add(Colores);
+        Colores.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        Colores.setText("Rojo, Verde, Azul, Sepia");
+        jPanel1.add(Colores, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 210, -1));
 
-        jRadioButton4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jRadioButton4.setText("Modificar Imagen");
-        jPanel1.add(jRadioButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 210, -1));
+        buttonGroup1.add(Modificar);
+        Modificar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        Modificar.setText("Modificar Imagen");
+        jPanel1.add(Modificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 210, -1));
 
-        jRadioButton5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jRadioButton5.setText("Blanco y Negro");
-        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(BN);
+        BN.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        BN.setText("Blanco y Negro");
+        BN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton5ActionPerformed(evt);
+                BNActionPerformed(evt);
             }
         });
-        jPanel1.add(jRadioButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 210, -1));
+        jPanel1.add(BN, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 210, -1));
 
         jButton1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jButton1.setText("Ejecutar");
@@ -124,10 +135,22 @@ public class Editor extends javax.swing.JFrame {
             getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Elija una imagen");
         } else {
-            BlancoNegro();
+            if (Convertir.isSelected()) {
+                Convertir();
+                System.out.println("Aun no");
+            } else if (BN.isSelected()) {
+                BlancoNegro();
+                JOptionPane.showMessageDialog(null, "Proceso completado");
+            }else if(Copia.isSelected()){
+                Copia();
+                System.out.println("Aun no");
+            }else if (Modificar.isSelected()) {
+                System.out.println("Aun no");
+            }else if (Colores.isSelected()) {
+                Cambiar();
+            }
+
         }
-
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void BlancoNegro() {
@@ -136,16 +159,41 @@ public class Editor extends javax.swing.JFrame {
             JPEGHandler.runHandler(cambiar);
         } catch (Exception ex) {
         }
-        mostrar(this.EtiquetaImg, "./Temp/BlancoNegro_.jpg");
+    }
+    
+    private void Convertir(){
+        Convertidor convertir = new Convertidor(img);
+        try {
+            JPEGHandler.runHandler(convertir);
+        } catch (Exception ex) {
+            
+        }
+    }
+    private void Copia(){
+        CopiaImg copia = new CopiaImg(img);
+        try {
+            JPEGHandler.runHandler(copia);
+        } catch (Exception ex) {
+
+        }
+    }
+    
+    private void Cambiar(){
+        CambiarColores cambiar = new CambiarColores(img);
+        try {
+            JPEGHandler.runHandler(cambiar);
+        } catch (Exception ex) {
+            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+    private void BNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton5ActionPerformed
+    }//GEN-LAST:event_BNActionPerformed
 
     private NodoImagen buscar() {
         JFileChooser fc = new JFileChooser();
-        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagenes", "jpg");
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagenes", "jpg", "jpeg", "bmp");
         fc.setFileFilter(filtro);
         int opcion = fc.showOpenDialog(this);
 
@@ -209,16 +257,17 @@ public class Editor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton BN;
+    private javax.swing.JRadioButton Colores;
+    private javax.swing.JRadioButton Convertir;
+    private javax.swing.JRadioButton Copia;
     private javax.swing.JLabel EtiquetaImg;
+    private javax.swing.JRadioButton Modificar;
     private javax.swing.JLabel Url;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
     // End of variables declaration//GEN-END:variables
 }

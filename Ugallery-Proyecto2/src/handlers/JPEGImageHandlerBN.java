@@ -16,7 +16,7 @@ public class JPEGImageHandlerBN extends ImageHandler {
         super(filename); 
         
         File f = new File(getFileName());
-        this.nombreCorto = FilenameUtils.removeExtension(f.getName());
+        //this.nombreCorto = FilenameUtils.removeExtension(f.getName());
     }
 
     @Override
